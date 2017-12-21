@@ -2,7 +2,7 @@
 #define __L_OBJECT_H__
 
 #include <stdarg.h>
-#include "NetworkUtil.h"
+#include <DynamicBuffer.h>
 
 #define NUM_TYPES 10
 #define NUM_ITEMS_OFFSET 1
@@ -10,19 +10,26 @@
 #define NUM_OBJ_OFFSET 0
 #define STR_SIZE 0x01
 
-#define ROUTER_ID (254)
-
 class LObject {
 	public:
-		LObject(uint8_t *buffer);
+        LObject(GenericBuffer<uint8_t> &buffer);
 		~LObject();
 
 		uint16_t getSize();
-		static uint8_t typeSize(uint8_t type);
-		uint8_t getNumObjects();
-		uint8_t typeAt(uint8_t index);
 
-		uint16_t writeTo(PacketWriter writer);
+		uint8_t getTypeAt(uint8_t index);
+        uint8_t setTypeAt(uint8_t index, uint8_t type);
+
+        uint8_t getLengthAt(uint8_t index);
+        uint8_t setLengthAt(uint8_t index, uint8_t length = 0);
+
+		uint16_t setStrAt(uint8_t index, char *str, uint16_t stringLen);
+		uint16_t getStrAt(uint8_t index, char *str, uint16_t stringLen, bool nullTerminate = true);
+
+		uint8_t setItemCount(uint8_t itemCount);
+        uint8_t getItemCount();
+
+        void setDataBuffer(GenericBuffer<uint8_t> &buffer);
 
 		int8_t int8At(uint8_t index);
 		bool int8At(uint8_t index, int8_t data);
@@ -45,20 +52,6 @@ class LObject {
 		float floatAt(uint8_t index);
 		bool floatAt(uint8_t index, float data);
 
-		uint8_t strlenAt(uint8_t index);
-		uint16_t setStrAt(uint8_t index, char *str, uint16_t stringLen);
-		uint16_t getStrAt(uint8_t index, char *str, uint16_t stringLen, bool nullTerminate = true);
-
-		void setItemCount(uint8_t itemCount);
-		void setItemTypeAt(uint8_t offset, uint8_t type);
-
-		void setDataBuffer(uint8_t *buffer);
-
-		typedef struct {
-			uint8_t type;
-			uint8_t size;
-		} ObjectType;
-
 		enum TYPES {
 			T_NONE = 0x00,
 			T_STRING = 0x01,
@@ -74,12 +67,15 @@ class LObject {
 			T_ARRAY = 0x0D
 		};
 
-		static LObject::TYPES getType(char c);
-		static uint16_t make(uint8_t *buffer, const char *fmt, ...);
-		static uint16_t makeImpl(uint8_t *buffer, const char *fmt, va_list argp);
+        static int8_t make(DynamicBuffer<uint8_t> &buffer, const char *fmt, ...);
+		static uint16_t make(GenericBuffer<uint8_t> &buffer, const char *fmt, ...);
+		static uint16_t makeImpl(GenericBuffer<uint8_t> &buffer, const char *fmt, va_list argp);
 
 	private:
-		uint8_t *dataTable;
+        static LObject::TYPES getType(char c);
+        static uint8_t typeSize(uint8_t type);
+
+		GenericBuffer<uint8_t> &dataTable;
 		uint16_t indexOf(uint8_t objIndex);
 		uint8_t strNum(uint8_t index);
 		uint16_t getDataOffset();
