@@ -317,7 +317,7 @@ uint8_t LObject::typeSize(uint8_t type) {
 
 uint16_t LObject::getDataOffset() {
     uint8_t stringCount = this->strNum(this->getItemCount());
-    return this->getItemCount() + (stringCount * this->typeSize(T_STRING)) + 1;
+    return this->getItemCount() + (stringCount * this->typeSize(T_STRING)) + NUM_ITEMS_OFFSET;
 }
 
 uint8_t LObject::strNum(uint8_t index) {
