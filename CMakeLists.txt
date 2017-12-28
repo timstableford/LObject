@@ -12,8 +12,6 @@ add_library(LObject SHARED src/LObject.cpp)
 target_link_libraries(LObject DynamicBuffer)
 target_include_directories(LObject PUBLIC src)
 
-if (TEST)
-
 if (NOT gtest_SOURCE_DIR)
 add_subdirectory(lib/googletest)
 endif(NOT gtest_SOURCE_DIR)
@@ -23,4 +21,3 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} .)
 
 add_executable(${PROJECT_NAME}_Test src/Test.cpp)
 target_link_libraries(${PROJECT_NAME}_Test gtest gtest_main LObject DynamicBuffer)
-endif(TEST)

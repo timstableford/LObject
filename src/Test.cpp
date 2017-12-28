@@ -27,7 +27,7 @@ TEST(IndependentMethod, TestBasicLifecycle) {
     ASSERT_EQ(12, obj.getLengthAt(1));
 
     char strBuf[sizeof(testStr) + 1];
-    obj.getStrAt(1, strBuf, obj.getLengthAt(1) + 1);
+    obj.getStrAt(1, strBuf, obj.getLengthAt(1) + 1, true);
     ASSERT_EQ(strlen(testStr), obj.getLengthAt(1));
     for (int i = 0; i < obj.getLengthAt(1) + 1; i++) {
         EXPECT_EQ(testStr[i], strBuf[i]);
