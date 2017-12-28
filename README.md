@@ -1,1 +1,1 @@
-Arduino library for serialising and parsing data for network transmission
+Generic library for serialising and de-serialising data from a DynamicBuffer.
