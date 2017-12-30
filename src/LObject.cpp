@@ -209,17 +209,40 @@ uint16_t LObject::makeImpl(GenericBuffer<uint8_t> &buffer, const char *fmt, va_l
     for(uint16_t i = 0; i < numArgs; i++) {
         uint8_t type = LObject::getType(fmt[i]);
         o.setTypeAt(i, type);
-        if (type == T_ARRAY) {
-            uint8_t arrLen = (uint8_t)va_arg(argpCopy, int);
-            o.setLengthAt(i, arrLen);
-            length += arrLen + 1;
-        } else if (type == T_STRING) {
-            uint8_t charLen = (uint8_t)strlen(va_arg(argpCopy, char *));
-            o.setLengthAt(i, charLen);
-            length += charLen + 1;
-        } else {
-            va_arg(argpCopy, char *);
-            length += typeSize(type);
+        switch (type) {
+            case T_ARRAY: {
+                uint8_t arrLen = (uint8_t)va_arg(argpCopy, int);
+                o.setLengthAt(i, arrLen);
+                length += arrLen + 1;
+                break;
+            }
+            case T_STRING: {
+                uint8_t charLen = (uint8_t)strlen(va_arg(argpCopy, char *));
+                o.setLengthAt(i, charLen);
+                length += charLen + 1;
+                break;
+            }
+            case T_INT8:
+            case T_UINT8:
+            case T_INT16:
+            case T_UINT16:
+                va_arg(argpCopy, int);
+                length += typeSize(type);
+                break;
+            case T_INT32:
+            case T_UINT32:
+                va_arg(argpCopy, long);
+                length += typeSize(type);
+                break;
+            case T_INT64:
+            case T_UINT64:
+                va_arg(argpCopy, long long);
+                length += typeSize(type);
+                break;
+            case T_FLOAT:
+                va_arg(argp, double);
+                length += typeSize(type);
+                break;
         }
     }
     va_end(argpCopy);
