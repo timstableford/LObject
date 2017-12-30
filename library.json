@@ -1,0 +1,21 @@
+{
+  "name": "LObject",
+  "keywords": "serialisation, de-serialisation",
+  "description": "A utility to write an object to and from a buffer",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/timstableford/LObject.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Tim Stableford",
+      "email": "tim.stableford1@gmail.com",
+      "url": "https://tstableford.co.uk",
+      "maintainer": true
+    }
+  ],
+  "version": "1.0.0",
+  "platforms": "*"
+}

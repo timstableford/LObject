@@ -1,3 +1,5 @@
+#ifdef __LINUX_BUILD
+
 #include <cstring>
 #include <cstdio>
 #include <functional>
@@ -68,3 +70,5 @@ TEST(IndependentMethod, TestManualArray) {
         EXPECT_EQ(data[i], fetchedData[i]);
     }
 }
+
+#endif // __LINUX_BUILD
