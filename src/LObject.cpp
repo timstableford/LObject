@@ -3,8 +3,9 @@
 #include <string.h>
 
 #include "LObject.h"
+#include "NetworkUtil.h"
 
-#define INT_GETSET(x, y) \
+#define INT_GETSET(x, y, ct, cf) \
 union x ## _u { \
     x data; \
     uint8_t arr[sizeof(x)]; \
@@ -17,29 +18,31 @@ x LObject::y(uint8_t index) { \
     for (uint8_t i = 0; i < sizeof(x); i++) { \
       data.arr[i] = this->dataTable[this->indexOf(index) + i]; \
     } \
-    return data.data; \
+    return cf(data.data); \
 } \
 bool LObject::y(uint8_t index, x value) { \
     if (this->indexOf(index) == 0) { \
         return false; \
     } \
     x ## _u data; \
-    data.data = value; \
+    data.data = ct(value); \
     for (uint8_t i = 0; i < sizeof(x); i++) { \
         this->dataTable[this->indexOf(index) + i] = data.arr[i]; \
     } \
     return true; \
 }
 
-INT_GETSET(int8_t, int8At)
-INT_GETSET(int16_t, int16At)
-INT_GETSET(int32_t, int32At)
-INT_GETSET(int64_t, int64At)
-INT_GETSET(uint8_t, uint8At)
-INT_GETSET(uint16_t, uint16At)
-INT_GETSET(uint32_t, uint32At)
-INT_GETSET(uint64_t, uint64At)
-INT_GETSET(float, floatAt)
+#define SIMPLE_FUNC(x) x
+
+INT_GETSET(int8_t, int8At, SIMPLE_FUNC, SIMPLE_FUNC)
+INT_GETSET(int16_t, int16At, htons, ntohs)
+INT_GETSET(int32_t, int32At, htonl, ntohl)
+INT_GETSET(int64_t, int64At, htonll, ntohll)
+INT_GETSET(uint8_t, uint8At, SIMPLE_FUNC, SIMPLE_FUNC)
+INT_GETSET(uint16_t, uint16At, htons, ntohs)
+INT_GETSET(uint32_t, uint32At, htonl, ntohl)
+INT_GETSET(uint64_t, uint64At, htonll, ntohll)
+INT_GETSET(float, floatAt, SIMPLE_FUNC, SIMPLE_FUNC)
 
 typedef struct {
     uint8_t type;
