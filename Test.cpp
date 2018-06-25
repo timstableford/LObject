@@ -1,13 +1,13 @@
 #ifdef __LINUX_BUILD
 
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 #include <functional>
 
 #include <gtest/gtest.h>
 
-#include <LObject.h>
 #include <DynamicBuffer.h>
+#include <LObject.h>
 
 TEST(IndependentMethod, TestBasicLifecycle) {
     char testStr[] = "hello world!";
@@ -17,7 +17,9 @@ TEST(IndependentMethod, TestBasicLifecycle) {
     ArrayBufferWrapper<uint8_t> wrapper2(buffer, size);
     LObject::make(wrapper2, "ls", 23434535, "hello world!");
 
-    uint8_t expectedBuilt[] = { 0x2, 0x6, 0x1, 0xc, 0x27, 0x95, 0x65, 0x1, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21 };
+    uint8_t expectedBuilt[] = {0x2,  0x6,  0x1,  0xc,  0x27, 0x95, 0x65,
+                               0x1,  0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+                               0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21};
     ASSERT_EQ(sizeof(expectedBuilt), size);
     for (int i = 0; i < size; i++) {
         EXPECT_EQ(expectedBuilt[i], buffer[i]);
@@ -42,7 +44,9 @@ TEST(IndependentMethod, TestMakeFromBuffer) {
     ASSERT_NE(SLOT_FREE, result);
 
     DynamicBuffer<uint8_t>::Buffer slotBuffer = buffer.getBuffer(result);
-    uint8_t expectedBuilt[] = { 0x2, 0x6, 0x1, 0xc, 0x27, 0x95, 0x65, 0x1, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21 };
+    uint8_t expectedBuilt[] = {0x2,  0x6,  0x1,  0xc,  0x27, 0x95, 0x65,
+                               0x1,  0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+                               0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21};
     // The assigned slot should at least be big enough.
     ASSERT_GE(slotBuffer.size(), sizeof(expectedBuilt));
     for (unsigned int i = 0; i < sizeof(expectedBuilt); i++) {
@@ -71,4 +75,4 @@ TEST(IndependentMethod, TestManualArray) {
     }
 }
 
-#endif // __LINUX_BUILD
+#endif  // __LINUX_BUILD
