@@ -1,3 +1,6 @@
 [submodule "googletest"]
     path = lib/googletest
     url = https://github.com/google/googletest
+[submodule "DynamicBuffer"]
+    path = lib/DynamicBuffer
+    url = https://github.com/timstableford/DynamicBuffer
