@@ -7,7 +7,9 @@ option(BUILD_TESTS "Build all tests." OFF)
 
 add_definitions(-D__LINUX_BUILD)
 
+if (NOT TARGET DynamicBuffer)
 add_subdirectory(lib/DynamicBuffer)
+endif()
 
 include_directories(src)
 
