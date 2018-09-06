@@ -22,21 +22,21 @@ class LObject {
     ~LObject();
 
     /**
-      * \brief Gets the size of the object in bytes.
-      */
+     * \brief Gets the size of the object in bytes.
+     */
     uint16_t getSize();
 
     /**
-      * \brief Gets the type at the given index.
-      * \param index The index to get the type at.
-      * \return The type according to LObject::TYPES.
-      */
+     * \brief Gets the type at the given index.
+     * \param index The index to get the type at.
+     * \return The type according to LObject::TYPES.
+     */
     uint8_t getTypeAt(uint8_t index);
     /**
-      * \brief Sets the type at the given index.
-      * \param index The index to get the type at.
-      * \param type The type according to LObject::TYPES.
-      */
+     * \brief Sets the type at the given index.
+     * \param index The index to get the type at.
+     * \param type The type according to LObject::TYPES.
+     */
     uint8_t setTypeAt(uint8_t index, uint8_t type);
 
     /**
@@ -68,17 +68,17 @@ class LObject {
                       bool nullTerminate = false);
 
     /**
-      * \brief Sets the number of items in the object.
-      */
+     * \brief Sets the number of items in the object.
+     */
     uint8_t setItemCount(uint8_t itemCount);
     /**
-      * \brief Gets the number of items in the object.
-      */
+     * \brief Gets the number of items in the object.
+     */
     uint8_t getItemCount();
 
     /**
-      * \brief Sets the data buffer used by this class.
-      */
+     * \brief Sets the data buffer used by this class.
+     */
     void setDataBuffer(GenericBuffer<uint8_t> &buffer);
 
     int8_t int8At(uint8_t index);
@@ -103,8 +103,8 @@ class LObject {
     bool floatAt(uint8_t index, float data);
 
     /**
-      * \brief An enum mapping supported types to their numeric values.
-      */
+     * \brief An enum mapping supported types to their numeric values.
+     */
     enum TYPES {
         T_NONE = 0x00,
         T_STRING = 0x01,
