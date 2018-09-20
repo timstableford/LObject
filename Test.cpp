@@ -93,6 +93,16 @@ TEST_F(LTest, TestMakeFromBufferSlot) {
     }
 }
 
+TEST_F(LTest, TestFromArray) {
+    uint8_t testData[] = {0x2, 0x6,  0x1,  0xc,  0x1,  0x65, 0x95,
+                               0x27, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+                               0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21};
+    LObject obj(testData, sizeof(testData) / sizeof(testData[0]));
+    ASSERT_EQ(2, obj.getItemCount());
+    ASSERT_EQ(23434535, obj.int32At(0));
+    ASSERT_EQ(12, obj.getLengthAt(1));
+}
+
 TEST_F(LTest, TestFloat) {
     uint16_t size = LObject::make(m_buffer, "f", 0.123456f);
     ASSERT_EQ(6, size);

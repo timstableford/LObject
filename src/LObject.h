@@ -4,11 +4,9 @@
 #include <DynamicBuffer.h>
 #include <stdarg.h>
 
-#define NUM_TYPES 10
-#define NUM_ITEMS_OFFSET 1
-#define INDEX_TABLE_OFFSET 1
-#define NUM_OBJ_OFFSET 0
-#define STR_SIZE 0x01
+#define INDEX_TABLE_OFFSET (1) // Offset for the start of the types index table.
+#define NUM_OBJ_OFFSET (0) // Offset for the object count.
+#define STR_SIZE (0x01) // Number of bytes to use for string length.
 
 /**
   * \brief A class to serialise and de-serialise objects into a buffer.
@@ -19,6 +17,7 @@
 class LObject {
    public:
     LObject(GenericBuffer<uint8_t> &buffer);
+    LObject(uint8_t *data, uint16_t length);
     ~LObject();
 
     /**
@@ -153,6 +152,7 @@ class LObject {
     static LObject::TYPES getType(char c);
     static uint8_t typeSize(uint8_t type);
 
+    ArrayBufferWrapper<uint8_t> m_arrayBufferWrapper;
     GenericBuffer<uint8_t> &dataTable;
     uint16_t indexOf(uint8_t objIndex);
     uint8_t strNum(uint8_t index);

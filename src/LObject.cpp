@@ -63,7 +63,14 @@ static ObjectType typesArray[] = {
     {LObject::T_FLOAT, sizeof(float)}       // float
 };
 
-LObject::LObject(GenericBuffer<uint8_t> &buffer) : dataTable(buffer) {
+LObject::LObject(GenericBuffer<uint8_t> &buffer) :
+        m_arrayBufferWrapper(nullptr, 0), dataTable(buffer) {
+    // Nothing to do.
+}
+
+LObject::LObject(uint8_t *data, uint16_t length) :
+        LObject(m_arrayBufferWrapper) {
+    m_arrayBufferWrapper.setData(data, length);
     // Nothing to do.
 }
 
@@ -339,7 +346,7 @@ LObject::TYPES LObject::getType(char c) {
 }
 
 uint8_t LObject::typeSize(uint8_t type) {
-    for (uint8_t i = 0; i < NUM_TYPES; i++) {
+    for (uint8_t i = 0; i < sizeof(typesArray) / sizeof(typesArray[0]); i++) {
         if (typesArray[i].type == type) {
             return typesArray[i].size;
         }
@@ -351,7 +358,7 @@ uint8_t LObject::typeSize(uint8_t type) {
 uint16_t LObject::getDataOffset() {
     uint8_t stringCount = this->strNum(this->getItemCount());
     return this->getItemCount() + (stringCount * this->typeSize(T_STRING)) +
-           NUM_ITEMS_OFFSET;
+           INDEX_TABLE_OFFSET;
 }
 
 uint8_t LObject::strNum(uint8_t index) {
