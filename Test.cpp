@@ -37,17 +37,17 @@ TEST_F(LTest, TestGetSet_##type##_##suffix) { \
 TEST_GET_SET(max, "c", LObject::TYPES::T_INT8, int8, 127)
 TEST_GET_SET(min, "c", LObject::TYPES::T_INT8, int8, -128)
 TEST_GET_SET(max, "C", LObject::TYPES::T_UINT8, uint8, 255)
-TEST_GET_SET(min, "C", LObject::TYPES::T_UINT8, uint8, 0)
+TEST_GET_SET(min, "C", LObject::TYPES::T_UINT8, uint8, 0u)
 
 TEST_GET_SET(max, "d", LObject::TYPES::T_INT16, int16, 32767)
 TEST_GET_SET(min, "d", LObject::TYPES::T_INT16, int16, -32768)
 TEST_GET_SET(max, "D", LObject::TYPES::T_UINT16, uint16, 65535)
-TEST_GET_SET(min, "D", LObject::TYPES::T_UINT16, uint16, 0)
+TEST_GET_SET(min, "D", LObject::TYPES::T_UINT16, uint16, 0u)
 
 TEST_GET_SET(max, "l", LObject::TYPES::T_INT32, int32, 2147483647)
 TEST_GET_SET(min, "l", LObject::TYPES::T_INT32, int32, -2147483648)
 TEST_GET_SET(max, "L", LObject::TYPES::T_UINT32, uint32, 4294967295)
-TEST_GET_SET(min, "L", LObject::TYPES::T_UINT32, uint32, 0)
+TEST_GET_SET(min, "L", LObject::TYPES::T_UINT32, uint32, 0u)
 
 TEST_GET_SET(max, "m", LObject::TYPES::T_INT64, int64, 922337204775807ll)
 TEST_GET_SET(min, "m", LObject::TYPES::T_INT64, int64, -922337204775808ll)
@@ -75,6 +75,20 @@ TEST_F(LTest, TestBasicLifecycle) {
 
     ASSERT_EQ(strlen(testStr), obj.getLengthAt(1));
     ASSERT_EQ(0, memcmp(testStr, strBuf, obj.getLengthAt(1) + 1));
+}
+
+TEST_F(LTest, TestBuildToArray) {
+    char testStr[] = "hello world!";
+    uint8_t expectedBuilt[] = {0x2,  0x6,  0x1,  0xc,  0x1,  0x65, 0x95,
+                               0x27, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20,
+                               0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21};
+
+    ASSERT_EQ(sizeof(expectedBuilt), LObject::make(m_rawBuffer, 512, "ls", 23434535, testStr));
+    compare(expectedBuilt, sizeof(expectedBuilt));
+}
+
+TEST_F(LTest, TestBuildToTooSmallArray) {
+    ASSERT_EQ(0, LObject::make(m_rawBuffer, 2, "l", 23434535));
 }
 
 TEST_F(LTest, TestMakeFromBufferSlot) {

@@ -145,6 +145,20 @@ class LObject {
       * \return The size of the object in bytes.
       */
     static uint16_t make(GenericBuffer<uint8_t> &buffer, const char *fmt, ...);
+    /**
+      * \brief Construct the given objectinto the provided buffer based on
+      provided arguments.
+      * \param data The output array to build the object in.
+      * \param length The length of the buffer to put the data in to avoid over-runs.
+      * \param fmt The format string, each character representing a type.
+                   s - string, a - array (args expects a uint8_t for the array
+      length), c - int8, C - uint8,
+                   d - int16, D - uint16, l - int32, L - uint32, m - int64, M -
+      uint64, f - float.
+      * \param ... Variable argument data.
+      * \return The size of the object in bytes.
+      */
+    static uint16_t make(uint8_t *data, uint16_t length, const char *fmt, ...);
     static uint16_t makeImpl(GenericBuffer<uint8_t> &buffer, const char *fmt,
                              va_list argp);
 

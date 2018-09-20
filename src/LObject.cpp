@@ -211,6 +211,15 @@ uint16_t LObject::make(GenericBuffer<uint8_t> &buffer, const char *fmt, ...) {
     return return_value;
 }
 
+uint16_t LObject::make(uint8_t *data, uint16_t length, const char *fmt, ...) {
+    ArrayBufferWrapper<uint8_t> buffer(data, length);
+    va_list argp;
+    va_start(argp, fmt);
+    uint16_t return_value = LObject::makeImpl(buffer, fmt, argp);
+    va_end(argp);
+    return return_value;
+}
+
 uint16_t LObject::makeImpl(GenericBuffer<uint8_t> &buffer, const char *fmt,
                            va_list argp) {
     uint16_t numArgs = strlen(fmt);
@@ -265,6 +274,10 @@ uint16_t LObject::makeImpl(GenericBuffer<uint8_t> &buffer, const char *fmt,
 
     if (buffer.size() == 0) {
         return length;
+    }
+
+    if (length > buffer.size()) {
+        return 0;
     }
 
     // For each item in the object, assign it's data from the temporary buffer
