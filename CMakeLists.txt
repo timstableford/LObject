@@ -13,9 +13,19 @@ endif()
 
 include_directories(src)
 
-add_library(LObject SHARED src/LObject.cpp)
-target_link_libraries(LObject DynamicBuffer)
-target_include_directories(LObject PUBLIC src)
+set(SRCS src/LObject.cpp)
+
+# Build the shared library
+add_library(LObject_shared SHARED ${SRCS})
+set_target_properties(LObject_shared PROPERTIES OUTPUT_NAME "lobject")
+target_link_libraries(LObject_shared DynamicBuffer)
+target_include_directories(LObject_shared PUBLIC src)
+
+# Build the static library
+add_library(LObject_static STATIC ${SRCS})
+set_target_properties(LObject_static PROPERTIES OUTPUT_NAME "lobject")
+target_link_libraries(LObject_static DynamicBuffer)
+target_include_directories(LObject_static PUBLIC src)
 
 if (BUILD_TESTS)
 if (NOT gtest_SOURCE_DIR)
@@ -26,5 +36,5 @@ enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} .)
 
 add_executable(${PROJECT_NAME}_Test Test.cpp)
-target_link_libraries(${PROJECT_NAME}_Test gtest gtest_main LObject DynamicBuffer)
+target_link_libraries(${PROJECT_NAME}_Test gtest gtest_main LObject_static DynamicBuffer)
 endif()
