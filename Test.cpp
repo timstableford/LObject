@@ -54,6 +54,17 @@ TEST(IndependentMethod, TestMakeFromBuffer) {
     }
 }
 
+TEST(IndependentMethod, TestFloat) {
+    DynamicBuffer<uint8_t> buffer(32, 8);
+    int8_t result = LObject::make(buffer, "f", 0.123456f);
+    ASSERT_NE(SLOT_FREE, result);
+
+    DynamicBuffer<uint8_t>::Buffer slotBuffer = buffer.getBuffer(result);
+
+    LObject obj(slotBuffer);
+    ASSERT_EQ(0.123456f, obj.floatAt(0));
+}
+
 TEST(IndependentMethod, TestManualArray) {
     DynamicBuffer<uint8_t> buffer(16, 8);
     int8_t slot = buffer.allocate(128);

@@ -249,7 +249,7 @@ uint16_t LObject::makeImpl(GenericBuffer<uint8_t> &buffer, const char *fmt,
                 length += typeSize(type);
                 break;
             case T_FLOAT:
-                va_arg(argp, double);
+                va_arg(argpCopy, double);
                 length += typeSize(type);
                 break;
         }
