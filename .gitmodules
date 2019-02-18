@@ -3,4 +3,4 @@
     url = https://github.com/google/googletest
 [submodule "DynamicBuffer"]
     path = lib/DynamicBuffer
-    url = https://github.com/timstableford/DynamicBuffer
+    url = ssh://gogs@git.t3s.uk:2222/tstableford/DynamicBuffer.git
