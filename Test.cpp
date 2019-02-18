@@ -144,4 +144,40 @@ TEST_F(LTest, TestManualArray) {
     ASSERT_EQ(0, memcmp(data, fetchedData, 24));
 }
 
+#define __FIRMWARE "test_version"
+
+TEST_F(LTest, TestManualBuild) {
+    uint16_t handlerCount = 2;
+    uint16_t handlers[] = { 4, 2 };
+
+    uint16_t bufferLength = INDEX_TABLE_OFFSET + (handlerCount + 1) * 3 + 2;
+    bufferLength += 2 + strlen(__FIRMWARE);
+    uint8_t *tmpBuffer = reinterpret_cast<uint8_t *>(malloc(bufferLength));
+    ArrayBufferWrapper<uint8_t> buffer(tmpBuffer, bufferLength);
+
+    LObject s(buffer);
+    s.setItemCount(handlerCount + 3);
+
+    s.setTypeAt(0, LObject::TYPES::T_INT8);
+    s.setTypeAt(1, LObject::TYPES::T_STRING);
+    s.setLengthAt(1, strlen(__FIRMWARE));
+    s.setStrAt(1, __FIRMWARE, strlen(__FIRMWARE));
+    s.int8At(0, 1);
+
+    for (uint8_t i = 0; i < handlerCount; i++) {
+        s.setTypeAt(i + 2, LObject::TYPES::T_UINT16);
+        s.uint16At(i + 2, handlers[i]);
+    }
+    s.setTypeAt(handlerCount + 2, LObject::TYPES::T_UINT16);
+    s.uint16At(handlerCount + 2, 1);
+
+    printf("Manual build array:\r\n");
+    for (uint16_t i = 0; i < bufferLength; i++) {
+        printf("0x%x, ", tmpBuffer[i]);
+    }
+    printf("\r\n");
+
+    free(tmpBuffer);
+}
+
 #endif  // __LINUX_BUILD
